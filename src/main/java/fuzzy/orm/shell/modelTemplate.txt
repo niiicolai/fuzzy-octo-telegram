@@ -1,0 +1,23 @@
+package models;
+
+import fuzzy.orm.model.Model;
+
+public class #ClassName extends Model
+{
+    public #ClassName (int id)
+    {
+        super(id);
+#ConstructorDefault
+    }
+
+    public #ClassName (#ConstructorArguments)
+    {
+        super();
+#ConstructorSetters
+    }
+
+#GetterMethods
+
+#SetterMethods
+
+}

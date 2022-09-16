@@ -1,0 +1,22 @@
+package migrations;
+
+import fuzzy.orm.database.Database;
+import fuzzy.orm.database.request.Request;
+import fuzzy.orm.database.request.RequestType;
+import fuzzy.orm.database.response.Response;
+
+import java.util.HashMap;
+
+public class #ClassNameMigration
+{
+    public static void main(String[] args) {
+        HashMap<String, Object> properties = new HashMap<String, Object>();
+        properties.put("id", 0);
+#AddProperties
+        Request request = new Request("#ClassName", RequestType.CREATE_TABLE, properties);
+        Response response = Database.execute(request);
+
+        System.out.println("Code: " + response.code());
+        System.out.println("Error: " + response.error());
+    }
+}

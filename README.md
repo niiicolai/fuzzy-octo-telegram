@@ -31,7 +31,7 @@ SampleModel model = (SampleModel) SampleModel
 ```java
 SampleModel model = (SampleModel) SampleModel
                 .select()
-                .order(Model.ID, "DESC")
+                .order(Model.ID, "ASC")
                 .invoke();
 ```
 
@@ -40,7 +40,7 @@ SampleModel model = (SampleModel) SampleModel
 ```java
 SampleModel model = (SampleModel) SampleModel
                 .select()
-                .order(Model.ID, "ASC")
+                .order(Model.ID, "DESC")
                 .invoke();
 ```
 

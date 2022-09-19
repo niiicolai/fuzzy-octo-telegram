@@ -32,6 +32,7 @@ SampleModel model = (SampleModel) SampleModel
 SampleModel model = (SampleModel) SampleModel
                 .select()
                 .order(Model.ID, "ASC")
+                .limit(1)
                 .invoke();
 ```
 
@@ -41,6 +42,7 @@ SampleModel model = (SampleModel) SampleModel
 SampleModel model = (SampleModel) SampleModel
                 .select()
                 .order(Model.ID, "DESC")
+                .limit(1)
                 .invoke();
 ```
 

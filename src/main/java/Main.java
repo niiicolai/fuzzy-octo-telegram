@@ -1,53 +1,64 @@
+import fuzzy.orm.model.Model;
+import models.Car;
 import models.SuperHero;
-
-import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args)
     {
-        try
-        {
-            // Test find
-            SuperHero hero = new SuperHero(1);
-            hero.read();
+        SuperHero hero1 = (SuperHero) SuperHero
+                .find(10) // READ
+                .invoke();
 
-            System.out.println(hero.getId());
-            System.out.println(hero.getRealName());
-            System.out.println(hero.getPseudonym());
-            System.out.println(hero.getStrength());
+        SuperHero hero2 = (SuperHero) SuperHero
+                .find(10)  // READ + UPDATE
+                .invoke()
+                .update()
+                .insertProp("realName", "Unknown")
+                .insertProp("strength", 123)
+                .invoke();
 
-            // Test create
-            SuperHero superHero = new SuperHero("Superman", "Kent", 123);
-            superHero.create();
+        SuperHero hero3 = (SuperHero) SuperHero
+                .insert()  // CREATE
+                .insertProp("pseudonym", "Unknown")
+                .insertProp("realName", "Unknown")
+                .insertProp("strength", 123)
+                .invoke();
 
-            System.out.println(superHero.getId());
-            System.out.println(superHero.getRealName());
-            System.out.println(superHero.getPseudonym());
-            System.out.println(superHero.getStrength());
+        SuperHero hero4 = (SuperHero) SuperHero
+                .insert()  // CREATE + DELETE
+                .insertProp("pseudonym", "Unknown")
+                .insertProp("realName", "Unknown")
+                .insertProp("strength", 123)
+                .invoke()
+                .delete()
+                .invoke();
 
-            // Test update
-            superHero.setRealName("Not Kent");
-            superHero.setStrength(14212);
-            superHero.update();
+        printHero(hero1);
+        printHero(hero2);
+        printHero(hero3);
+        printHero(hero4);
 
-            System.out.println(superHero.getId());
-            System.out.println(superHero.getRealName());
-            System.out.println(superHero.getPseudonym());
-            System.out.println(superHero.getStrength());
+        Car car1 = (Car) Car
+                .insert()   // Create car
+                .insertProp("name", "Ford")
+                .invoke();
 
-            // Test delete
-            superHero.delete();
+        Car car2 = (Car) Car
+                .select()   // Get last created car
+                .order(Model.ID, "DESC")
+                .invoke();
 
-            SuperHero deletedHero = new SuperHero(superHero.getId());
-            deletedHero.read();
-            System.out.println(deletedHero.getId());
-            System.out.println(deletedHero.getRealName());
-            System.out.println(deletedHero.getPseudonym());
-            System.out.println(deletedHero.getStrength());
+        System.out.println(car1.getId());
+        System.out.println(car1.getName());
 
-        } catch (IllegalStateException e)
-        {
-            System.out.println(e.getMessage());
-        }
+        System.out.println(car2.getId());
+        System.out.println(car2.getName());
+    }
+
+    private static void printHero(SuperHero hero) {
+        System.out.println(hero.getId());
+        System.out.println(hero.getPseudonym());
+        System.out.println(hero.getRealName());
+        System.out.println(hero.getStrength());
     }
 }

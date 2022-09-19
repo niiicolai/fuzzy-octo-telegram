@@ -1,54 +1,59 @@
 package models;
 
+import fuzzy.orm.database.request.RequestBuilder;
 import fuzzy.orm.model.Model;
 
 public class SuperHero extends Model
 {
-    public SuperHero (int id)
-    {
-        super(id);
-		set("pseudonym", "");
-		set("realName", "");
-		set("strength", 0.0);
-
-    }
-
-    public SuperHero (String pseudonym, String realName, double strength)
-    {
-        super();
-		set("pseudonym", pseudonym);
-		set("realName", realName);
-		set("strength", strength);
-    }
+	private SuperHero () {
+		super();
+		setProperty("pseudonym", "");
+		setProperty("realName", "");
+		setProperty("strength", 0.0);
+	}
 
 	public String getPseudonym()
 	{
-		return (String)get("pseudonym");
+		return (String)getProperty("pseudonym");
 	}
 
 	public String getRealName()
 	{
-		return (String)get("realName");
+		return (String)getProperty("realName");
 	}
 
 	public double getStrength()
 	{
-		return (double)get("strength");
+		return (double)getProperty("strength");
 	}
 
 	public void setPseudonym(String pseudonym)
 	{
-		set("pseudonym", pseudonym);
+		setProperty("pseudonym", pseudonym);
 	}
 
 	public void setRealName(String realName)
 	{
-		set("realName", realName);
+		setProperty("realName", realName);
 	}
 
 	public void setStrength(double strength)
 	{
-		set("strength", strength);
+		setProperty("strength", strength);
 	}
 
+	public static RequestBuilder find(int id) {
+		SuperHero superHero = new SuperHero();
+		return Model.find(superHero, id);
+	}
+
+	public static RequestBuilder select() {
+		SuperHero superHero = new SuperHero();
+		return Model.select(superHero);
+	}
+
+	public static RequestBuilder insert() {
+		SuperHero superHero = new SuperHero();
+		return Model.insert(superHero);
+	}
 }

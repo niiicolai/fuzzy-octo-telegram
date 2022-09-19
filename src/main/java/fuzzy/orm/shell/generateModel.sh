@@ -84,16 +84,16 @@ for i in ${!PROPS[@]}; do
   IFS='=' read -ra PART <<< "${PROPS[$i]}"
 
   if [[ ${PART[0]} == "String" ]]; then
-    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}set(\"${PART[1]}\", \"\");${NEWLINE}"
+    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}setProperty(\"${PART[1]}\", \"\");${NEWLINE}"
 
   elif [[ ${PART[0]} == "double" ]]; then
-    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}set(\"${PART[1]}\", 0.0);${NEWLINE}"
+    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}setProperty(\"${PART[1]}\", 0.0);${NEWLINE}"
 
   elif [[ ${PART[0]} == "int" ]]; then
-    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}set(\"${PART[1]}\", 0);${NEWLINE}"
+    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}setProperty(\"${PART[1]}\", 0);${NEWLINE}"
 
   elif [[ ${PART[0]} == "boolean" ]]; then
-    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}set(\"${PART[1]}\", false);${NEWLINE}"
+    CONSTRUCTOR_DEFAULT+="${TAB}${TAB}setProperty(\"${PART[1]}\", false);${NEWLINE}"
 
   else
     echo "ERROR! Data type: ${PART[0]} is not implemented!"
@@ -108,9 +108,9 @@ for i in ${!PROPS[@]}; do
   IFS='=' read -ra PART <<< "${PROPS[$i]}"
 
   if [[ $i == $LAST_PROP_INDEX ]]; then
-    CONSTRUCTOR_SETTERS+="${TAB}${TAB}set(\"${PART[1]}\", ${PART[1]});"
+    CONSTRUCTOR_SETTERS+="${TAB}${TAB}setProperty(\"${PART[1]}\", ${PART[1]});"
   else
-    CONSTRUCTOR_SETTERS+="${TAB}${TAB}set(\"${PART[1]}\", ${PART[1]});${NEWLINE}"
+    CONSTRUCTOR_SETTERS+="${TAB}${TAB}setProperty(\"${PART[1]}\", ${PART[1]});${NEWLINE}"
   fi
 done
 
@@ -120,7 +120,7 @@ GETTER_METHODS=""
 for i in ${!PROPS[@]}; do
   IFS='=' read -ra PART <<< "${PROPS[$i]}"
   GETTER_METHODS+="${TAB}public ${PART[0]} get${PART[1]^}()${NEWLINE}${TAB}{${NEWLINE}"
-  GETTER_METHODS+="${TAB}${TAB}return (${PART[0]})get(\"${PART[1]}\");${NEWLINE}${TAB}}"
+  GETTER_METHODS+="${TAB}${TAB}return (${PART[0]})getProperty(\"${PART[1]}\");${NEWLINE}${TAB}}"
   if [[ $i != $LAST_PROP_INDEX ]]; then
     GETTER_METHODS+=${NEWLINE}${NEWLINE}
   fi
@@ -131,8 +131,8 @@ done
 SETTER_METHODS=""
 for i in ${!PROPS[@]}; do
   IFS='=' read -ra PART <<< "${PROPS[$i]}"
-  SETTER_METHODS+="${TAB}public void set${PART[1]^}(${PART[0]} ${PART[1]})${NEWLINE}${TAB}{${NEWLINE}"
-  SETTER_METHODS+="${TAB}${TAB}set(\"${PART[1]}\", ${PART[1]});${NEWLINE}${TAB}}"
+  SETTER_METHODS+="${TAB}public void setProperty${PART[1]^}(${PART[0]} ${PART[1]})${NEWLINE}${TAB}{${NEWLINE}"
+  SETTER_METHODS+="${TAB}${TAB}setProperty(\"${PART[1]}\", ${PART[1]});${NEWLINE}${TAB}}"
   if [[ $i != $LAST_PROP_INDEX ]]; then
     SETTER_METHODS+=${NEWLINE}${NEWLINE}
   fi
@@ -144,16 +144,16 @@ MIGRATION_ADD_PROPERTIES=""
 for i in ${!PROPS[@]}; do
   IFS='=' read -ra PART <<< "${PROPS[$i]}"
   if [[ ${PART[0]} == "String" ]]; then
-    MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}properties.put(\"${PART[1]}\", \"\");${NEWLINE}"
+    MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}request.addProp(\"${PART[1]}\", \"\");${NEWLINE}"
 
   elif [[ ${PART[0]} == "double" ]]; then
-    MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}properties.put(\"${PART[1]}\", 0.0);${NEWLINE}"
+    MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}request.addProp(\"${PART[1]}\", 0.0);${NEWLINE}"
 
   elif [[ ${PART[0]} == "int" ]]; then
-      MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}properties.put(\"${PART[1]}\", 0);${NEWLINE}"
+      MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}request.addProp(\"${PART[1]}\", 0);${NEWLINE}"
 
   elif [[ ${PART[0]} == "boolean" ]]; then
-    MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}properties.put(\"${PART[1]}\", false);${NEWLINE}"
+    MIGRATION_ADD_PROPERTIES+="${TAB}${TAB}request.addProp(\"${PART[1]}\", false);${NEWLINE}"
 
   else
     echo "ERROR! Data type: ${PART[0]} is not implemented!"

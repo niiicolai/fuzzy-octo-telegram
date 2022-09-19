@@ -1,85 +1,67 @@
 package fuzzy.orm.model;
 
-import fuzzy.orm.database.request.RequestType;
-import fuzzy.orm.synchronizer.Synchronizer;
+import fuzzy.orm.database.request.Operation;
+import fuzzy.orm.database.request.RequestBuilder;
 
 import java.util.HashMap;
 
-public class Model extends PropertyModel
+public class Model
 {
     public static final String ID = "id";
-    protected boolean isSynchronized;
+    protected HashMap<String, Object> props
+            = new HashMap<>();
 
-    public Model()
-    {
-        super();
+    public Model() {
+        props.put(ID, 0);
     }
 
-    public Model(int id)
-    {
-        super();
-        set(ID, id);
+    public int getId() {
+        return (int)props.get(ID);
     }
 
-    public Model(HashMap<String, Object> properties)
-    {
-        super();
-        addProperties(properties);
+    public void setProperty(String key, Object value) {
+        props.put(key, value);
     }
 
-    public int getId() throws IllegalStateException
-    {
-        if (!contains(ID)) {
-            String error = "The object has no id property!";
-            throw new IllegalStateException(error);
-        }
-
-        return (int)get(ID);
+    public Object getProperty(String key) {
+        return props.get(key);
     }
 
-    public boolean create() throws IllegalStateException
-    {
-        if (isSynchronized)
-        {
-            String error = "The object is already created!";
-            throw new IllegalStateException(error);
-        }
-
-        isSynchronized = Synchronizer.execute(this, RequestType.CREATE);
-        return isSynchronized;
+    public HashMap<String, Object> getProps() {
+        return props;
     }
 
-    public boolean read() throws IllegalStateException
-    {
-        isSynchronized = Synchronizer.execute(this, RequestType.READ);
-        return isSynchronized;
+    /* Operations */
+
+    public static RequestBuilder find(Model model, int id) {
+        RequestBuilder builder = new RequestBuilder(model);
+        builder.setOperation(Operation.SELECT);
+        builder.where(ID, id);
+        return builder;
     }
 
-    public boolean update() throws IllegalStateException
-    {
-        if (!isSynchronized)
-        {
-            String error = "The object should be created/read before it can be updated!";
-            throw new IllegalStateException(error);
-        }
-        isSynchronized = Synchronizer.execute(this, RequestType.UPDATE);
-        return isSynchronized;
+    public static RequestBuilder select(Model model) {
+        RequestBuilder builder = new RequestBuilder(model);
+        builder.setOperation(Operation.SELECT);
+        return builder;
     }
 
-    public boolean delete() throws IllegalStateException
-    {
-        if (!isSynchronized)
-        {
-            String error = "The object should be created/read before it can be deleted!";
-            throw new IllegalStateException(error);
-        }
+    public static RequestBuilder insert(Model model) {
+        RequestBuilder builder = new RequestBuilder(model);
+        builder.setOperation(Operation.INSERT);
+        return builder;
+    }
 
-        if (Synchronizer.execute(this, RequestType.DELETE))
-        {
-            isSynchronized = false;
-            return true;
-        }
+    public RequestBuilder update() {
+        RequestBuilder builder = new RequestBuilder(this);
+        builder.setOperation(Operation.UPDATE);
+        return builder;
+    }
 
-        return false;
+    public RequestBuilder delete() {
+        RequestBuilder builder = new RequestBuilder(this);
+        builder.setOperation(Operation.DELETE);
+        builder.where(ID, getId());
+        return builder;
     }
 }

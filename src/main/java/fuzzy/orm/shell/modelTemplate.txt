@@ -1,12 +1,14 @@
 package models;
 
+import fuzzy.orm.database.request.RequestBuilder;
 import fuzzy.orm.model.Model;
 
 public class #ClassName extends Model
 {
-    public #ClassName (int id)
+
+    private #ClassName ()
     {
-        super(id);
+        super();
 #ConstructorDefault
     }
 
@@ -20,4 +22,18 @@ public class #ClassName extends Model
 
 #SetterMethods
 
+    public static RequestBuilder find(int id) {
+		#ClassName model = new #ClassName();
+		return Model.find(model, id);
+	}
+
+	public static RequestBuilder select() {
+		#ClassName model = new #ClassName();
+		return Model.select(model);
+	}
+
+	public static RequestBuilder insert() {
+		#ClassName model = new #ClassName();
+		return Model.insert(model);
+	}
 }

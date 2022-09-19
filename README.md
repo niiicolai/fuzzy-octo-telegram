@@ -29,7 +29,6 @@ SampleModel model = (SampleModel) SampleModel
 ### Find first created entity
 
 ```java
-int id = 5;
 SampleModel model = (SampleModel) SampleModel
                 .select()
                 .order(Model.ID, "DESC")
@@ -39,7 +38,6 @@ SampleModel model = (SampleModel) SampleModel
 ### Find last created entity
 
 ```java
-int id = 5;
 SampleModel model = (SampleModel) SampleModel
                 .select()
                 .order(Model.ID, "ASC")
